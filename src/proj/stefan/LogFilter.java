@@ -18,7 +18,7 @@ public class LogFilter {
         try (BufferedReader br = new BufferedReader(
                 new FileReader(this.input_file));
              BufferedWriter bw = new BufferedWriter(
-                     new FileWriter(this.output_file))
+                new FileWriter(this.output_file))
         ) {
             String line;
             String tokens[] = new String[4];
@@ -29,17 +29,7 @@ public class LogFilter {
                 System.out.println(tokens[0]);
 
 
-                byte ip_address[] = new byte[4];
-                int ip_address2[] = new int[4];
-                String ip_tokens[] = tokens[0].split("\\.");
-
-                System.out.println(ip_tokens[3]);
-
-                for (int i = 0; i < 4; i++) {
-                    ip_address2[i] = Integer.parseInt(ip_tokens[i]);
-                    ip_address[i] = (byte) ip_address2[i];
-                    System.out.println(ip_address[i]);
-                }
+                byte[] ip_address = getBytesIP(tokens[0]);
 
                 InetAddress address = InetAddress.getByAddress(ip_address);
 
@@ -50,11 +40,23 @@ public class LogFilter {
 
                 bw.write(hostName);
             }
-
-            br.close();
-            bw.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private byte[] getBytesIP(String token) {
+        byte ip_address[] = new byte[4];
+        int ip_address2[] = new int[4];
+        String ip_tokens[] = token.split("\\.");
+
+        System.out.println(ip_tokens[3]);
+
+        for (int i = 0; i < 4; i++) {
+            ip_address2[i] = Integer.parseInt(ip_tokens[i]);
+            ip_address[i] = (byte) ip_address2[i];
+            System.out.println(ip_address[i]);
+        }
+        return ip_address;
     }
 }
